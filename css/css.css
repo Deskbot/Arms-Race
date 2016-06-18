@@ -70,9 +70,13 @@ strong {
 .screen-side .inventory td.population {
     text-align: center;
 }
+.screen-side .inventory td.population .quantity {
+    font-weight: bold;
+}
 
 .screen-side .inventory td:not(.population) .quantity {
     float: right;
+    font-weight: bold;
 }
 
 /* options list */

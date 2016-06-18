@@ -12,7 +12,6 @@
         <script src="js/classes/Controller.js" defer></script>
         <script src="js/classes/Game.js" defer></script>
         <script src="js/classes/Item.js" defer></script>
-        <script src="js/classes/Occupations.js" defer></script>
         <script src="js/classes/Player.js" defer></script>
         <script src="js/classes/Population.js" defer></script>
         <script src="js/classes/Log.js" defer></script>
@@ -32,17 +31,22 @@
                     <tbody>
                         <tr>
                             <td class="population" colspan="3">
-                                Population: <span class="quantity"></span>
+                                Population: <span class="quantity"></span> / <span class="limit">poop</span>
                             </td>
                         </tr>
                         <tr>
                             <td data-item="water">Water <span class="quantity">0</span></td>
                             <td data-item="grain">Grain <span class="quantity">0</span></td>
-                            <td data-item="bread">Bread <span class="quantity">0</span></td>
+                            <td data-item="wood">Wood <span class="quantity">0</span></td>
+
                         </tr>
                         <tr>
+                            <td data-item="hut">Hut <span class="quantity">0</span></td>
+                            <td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td data-item="bread">Bread <span class="quantity">0</span></td>
                             <td data-item="ore">Ore <span class="quantity">0</span></td>
-                            <td data-item="wood">Wood <span class="quantity">0</span></td>
                             <td data-item="livestock">Livestock <span class="quantity">0</span></td>
                         </tr>
                         <tr>
@@ -63,6 +67,14 @@
                     </li>
                     <li class="option logger" data-job="logger">
                         <span class="name"><strong>Logger</strong> (Wood +1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option builder" data-job="builder">
+                        <span class="name"><strong>Builder</strong> (Hut +1, Wood -10)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="down">-</button>

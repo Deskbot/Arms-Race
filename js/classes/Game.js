@@ -8,7 +8,6 @@ let Game = function() {
         this.speed = speed; //miliseconds
 
         this.startTime();
-        
     }
 
     //attributes
@@ -36,7 +35,8 @@ let Game = function() {
         for (let key of keys) {
             
             let workers = player.population.inJob(key);
-            let resources = Population.jobs.get(key).resources;
+            let job = Population.jobs.get(key);
+            let resources = job.resources;
             let possible = undefined;
             let changes = {};
 
@@ -46,6 +46,7 @@ let Game = function() {
 
                 if (item === 'population') {
                     player.population.alter(change);
+
                 } else if (!bag.canAlterQuantity(item, change)) {
                     possible = false;
                     break;
@@ -55,6 +56,9 @@ let Game = function() {
             if (possible !== false) {
                 for (let item in changes) {
                     bag.alterQuantity(item, changes[item]);
+
+                    let event = job.event;
+                    if (typeof event === 'function') event.bind(player.population)(); //add context of the player's population and run
                 }
             }
         }

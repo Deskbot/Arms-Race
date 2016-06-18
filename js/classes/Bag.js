@@ -18,7 +18,9 @@ let Bag = function() {
             items.set('tank-driver', 0);
 
             return items;
-        }();  
+        }();
+
+        this.setQuantity('hut', 1);
     }
 
     //attributes
