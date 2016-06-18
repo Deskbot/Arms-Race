@@ -1,0 +1,108 @@
+body {
+    
+}
+
+main {
+    margin: auto;
+    width: 1200px;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+#log {
+    background-color: #EEEEEE;
+    border-color: black;
+    border-width: 1px 0;
+    border-style: solid;
+    height: 60px;
+    margin: 10px 0;
+    overflow-y: hidden;
+    width: 100%;
+}
+
+#log li {
+    width: 100%;
+}
+
+.screen-side {
+    display: inline-block;
+    background: #EEEEEE;
+    border-color: black;
+    border-style: solid;
+    border-width: 0 1px;
+    margin: 0 5px;
+    padding: 0 5px;
+    width: calc(50% - 22px);
+}
+
+#left {
+    border-right: 1px solid black;
+    float: left;
+}
+
+#right {
+    border-left: 1px solid black;
+    float: right;
+}
+
+/* inventory table */
+
+.screen-side .inventory {
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.screen-side .inventory td {
+    border: 1px solid black;
+    padding: 2px 5px;
+    width: calc(100% / 3 - 12px);
+}
+
+.screen-side .inventory td.population {
+    text-align: center;
+}
+
+.screen-side .inventory td:not(.population) .quantity {
+    float: right;
+}
+
+/* options list */
+
+.control-list > .option {
+    border-width: 1px;
+    border-style: solid;
+    border-color: white;
+    padding: 3px 2px 2px 2px;
+}
+
+.control-list > li > .buttons {
+    display: inline-block;
+    float: right;
+}
+
+.control-list > .option button {
+    background-color: #EEEEEE;
+    border: 1px solid #666666;
+    border-radius: 2px;
+    height: 15px;
+    margin: 0 1px;
+    padding: 0;
+    width: 15px;
+}
+
+#left > .control-list > .option.selected {
+    border-color: #FF0000;
+}
+
+#right > .control-list > .option.selected {
+    border-color: #0000FF;
+}

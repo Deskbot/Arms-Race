@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Arms Race</title>
+
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" type="text/css" href="css/css.css">
+
+        <script src="js/jQuery.js"></script>
+        
+        <script src="js/classes/Bag.js" defer></script>
+        <script src="js/classes/Controller.js" defer></script>
+        <script src="js/classes/Game.js" defer></script>
+        <script src="js/classes/Item.js" defer></script>
+        <script src="js/classes/Occupations.js" defer></script>
+        <script src="js/classes/Player.js" defer></script>
+        <script src="js/classes/Population.js" defer></script>
+        <script src="js/classes/Log.js" defer></script>
+
+        <script src="js/init.js" defer></script>
+    </head>
+    <body>
+        <noscript>You need JavaScript.</noscript>
+        <main>
+            <ul id="log"></ul>
+
+            <div id="left" class="screen-side"></div><div id="right" class="screen-side"></div>
+
+            <template id="side">
+                <h2>Inventory</h2>
+                <table class="inventory">
+                    <tbody>
+                        <tr>
+                            <td class="population" colspan="3">
+                                Population: <span class="quantity"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-item="water">Water <span class="quantity">0</span></td>
+                            <td data-item="grain">Grain <span class="quantity">0</span></td>
+                            <td data-item="bread">Bread <span class="quantity">0</span></td>
+                        </tr>
+                        <tr>
+                            <td data-item="ore">Ore <span class="quantity">0</span></td>
+                            <td data-item="wood">Wood <span class="quantity">0</span></td>
+                            <td data-item="livestock">Livestock <span class="quantity">0</span></td>
+                        </tr>
+                        <tr>
+                            <td data-item="footsoldier">Footsoldier <span class="quantity">0</span></td>
+                            <td data-item="horseman">Horseman <span class="quantity">0</span></td>
+                            <td data-item="tank">Tank Driver<span class="quantity">0</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Occupations</h2>
+                <ul class="occupations control-list">
+                    <li class="being-merry" data-job="being-merry">
+                        <span class="name"><strong>Being Merry</strong> (Population +0.5)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                        </span>
+                    </li>
+                    <li class="option logger" data-job="logger">
+                        <span class="name"><strong>Logger</strong> (Wood +1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option water-carrier" data-job="water-carrier">
+                        <span class="name"><strong>Water Carrier</strong> (Water +1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option farmer" data-job="farmer">
+                        <span class="name"><strong>Farmer</strong> (Grain +1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option baker" data-job="baker">
+                        <span class="name"><strong>Baker</strong> (Bread +4, Grain -1, Water -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option miner" data-job="miner">
+                        <span class="name"><strong>Miner</strong> (Ore +1, Bread -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option rearer" data-job="rearer">
+                        <span class="name"><strong>Rearer</strong> (Livestock +1, Grain -10)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                </ul>
+            </template>
+            <script type="text/javascript">
+                let left = $('#left');
+                let right = $('#right');
+                let sideTemplate = $('#side');
+
+                left.html(sideTemplate.html());
+                right.html(sideTemplate.html());
+            </script>
+        </main>
+    </body>
+</html>
