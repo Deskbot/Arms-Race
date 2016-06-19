@@ -7,6 +7,14 @@ main {
     width: 1200px;
 }
 
+hr {
+    margin: 3px 0 2px 0;
+}
+
+ul {
+    margin-bottom: 10px;
+}
+
 h2 {
     font-weight: bold;
     font-size: 18px;
@@ -53,28 +61,35 @@ strong {
     float: right;
 }
 
-/* inventory table */
+/* display tables */
 
-.screen-side .inventory {
+.screen-side .display {
     border-collapse: collapse;
     margin-bottom: 10px;
     width: 100%;
 }
 
-.screen-side .inventory td {
+.screen-side .display td {
     border: 1px solid black;
     padding: 2px 5px;
-    width: calc(100% / 3 - 12px);
 }
 
-.screen-side .inventory td.population {
+.screen-side .inventory td {
+    width: 25%;
+}
+
+.screen-side .military td {
+    width: 25%;
+}
+
+.screen-side .display td.population {
     text-align: center;
 }
-.screen-side .inventory td.population .quantity {
+.screen-side .display td.population .quantity {
     font-weight: bold;
 }
 
-.screen-side .inventory td:not(.population) .quantity {
+.screen-side .display td:not(.population) .quantity {
     float: right;
     font-weight: bold;
 }

@@ -1,25 +1,32 @@
 let Player = function() {
-	//constructor
-	function Player(game, number) {
-		this.number = number;
-		this.class = 'player' + number;
-		this.sideName = number == 1 ? 'left' : 'right';
-		this.side = game.container.children('#' + this.sideName);
-		this.bag = new Bag(this);
-		this.controller = new Controller(this);
-		this.population = new Population(this);
-	}
+    //constructor
+    function Player(game, number) {
+        this.game = game;
+        this.number = number;
 
-	//attributes
-	
+        this.class = 'player' + number;
+        this.sideName = number == 1 ? 'left' : 'right';
+        this.side = game.container.children('#' + this.sideName);
+        this.bag = new Bag(this);
+        this.military = new Military(this);
+        this.population = new Population(this);
+        this.controller = new Controller(this);
+    }
 
-
-	//methods
-	Player.prototype.getClass = function() {
-		return 'player' + this.number;
-	}
+    //attributes
+    
 
 
+    //methods
+    Player.prototype.getClass = function() {
+        return 'player' + this.number;
+    }
 
-	return Player;
+    Player.prototype.getOpponent = function() {
+        return this.game.getPlayer(this.number === 1 ? 2 : 1);
+    }
+
+
+
+    return Player;
 }();

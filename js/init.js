@@ -4,7 +4,7 @@ $(document).ready(steadyGo);
 let game;
 
 function steadyGo() {
-    game = new Game($('main'), 2000);
+    game = new Game($('main'), 1000);
 
     //listeners
     let body = $('body');
@@ -29,19 +29,27 @@ function steadyGo() {
                 break;
 
             case 65: //a
-                game.player1.controller.decrease();
+                if (!game.player1.controller.isAtMilitary()) {
+                    game.player1.controller.decrease();
+                }
+                
                 break;
 
             case 68: //d
                 game.player1.controller.increase();
+                
                 break;
 
             case 37: //left
-                game.player2.controller.decrease();
+                if (!game.player2.controller.isAtMilitary()) {
+                    game.player2.controller.decrease();
+                }
+
                 break;
 
             case 39: //right
                 game.player2.controller.increase();
+                
                 break;
         }
     });

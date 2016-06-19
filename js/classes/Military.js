@@ -1,0 +1,135 @@
+let Military = function() {
+    //constructor
+    function Military(owner) {
+        this.owner = owner;
+        this.inAction = {
+            arsonist: 0,
+            footsoldier: 0,
+            horseman: 0,
+            'tank-driver': 0
+        };
+
+        this.inActionElem = this.owner.side.children('.military');
+    }
+
+    //attributes
+    Military.roles = {
+        arsonist: {
+            name: 'Arsonist',
+            strength: 0,
+            resources: {
+                alcohol: -2,
+                cloth: -1
+            },
+            effect: {
+                hut: -1
+            },
+            event: function() { //needs binding to military
+                this.killInAction('arsonist', 1);
+            }
+        },
+        footsoldier: {
+            name: 'Footsoldier',
+            strength: 1,
+            resources: {
+                iron: -10
+            },
+            effect: {
+                population: -1
+            }
+        },
+        horseman: {
+            name: 'Horseman',
+            strength: 2,
+            resources: {
+                iron: -10
+            },
+            effect: {
+                population: -3
+            }
+        },
+        "tank-driver": {
+            name: 'Tank Driver',
+            strength: 3,
+            resources: {
+                iron: -100
+            },
+            effect: {
+                population: -10
+            }
+        }
+    };
+    Military.strengthToRole = {
+        0: 'arsonist',
+        1: 'footsoldier',
+        2: 'horseman',
+        3: 'tank-driver'
+    };
+
+    //methods
+    Military.prototype.kill = function(role, quantity) {
+        //prioritise kill on opp military
+        let killsRemaining = quantity;
+        let opponent = this.owner.getOpponent();
+        let foe = opponent.military;
+
+        for (let targetStrength = role.strength; targetStrength >= 0 && killsRemaining >= 0; targetStrength--) {
+            let targetRole = Military.strengthToRole[targetStrength];
+            let targets = foe.getNumActive(targetRole);
+            let reduction;
+
+            if (targets > killsRemaining) {
+                reduction = killsRemaining;
+            } else {
+                reduction = targets;
+            }
+
+            foe.alterInAction(targetRole, reduction);
+
+            killsRemaining -= reduction;
+        }
+
+        //kill civilians
+        let job;
+        if (killsRemaining > 0) {
+            job = opponent.population.killRandom();
+            console.log(job);
+        }
+
+        //add to log
+        let jobData = Population.jobs.get(job);
+        let deathName = typeof jobData.deathName !== 'undefined' ? jobData.deathName : jobData.name;
+        this.owner.game.log.put(opponent.getClass() + "'s " + deathName + " was killed.");
+
+        game.stopTime(); //provisional
+
+    };
+    Military.prototype.killInAction = function(role, qty) {
+        this.updateInAction(role, -qty);
+        this.owner.population.alter(-1);
+    };
+    Military.prototype.increase = function(role) {
+        if (this.owner.population.getQuantity('being-merry') >= 1) {
+            this.setNumActive(role, this.getNumActive(role) + 1);
+            this.owner.population.alterQuantity('being-merry', -1);
+        }
+    }
+    Military.prototype.setNumActive = function(role, qty) {
+        this.inAction[role] = qty;
+        this.updateInAction(role);
+    }
+    Military.prototype.getNumActive = function(role) {
+        return this.inAction[role];
+    }
+    Military.prototype.alterInAction = function(role, diff) {
+        this.inAction[role] -= amount;
+        this.updateInAction(role);
+    }
+    Military.prototype.updateInAction = function(role) {
+        this.inActionElem.find('[data-role=' + role + ']').children('.quantity').html(this.inAction[role]);
+    }
+
+
+
+    return Military;
+}();

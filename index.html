@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="css/css.css">
 
         <script src="js/jQuery.js"></script>
+        <script src="js/util.js" defer></script>
         
         <script src="js/classes/Bag.js" defer></script>
         <script src="js/classes/Controller.js" defer></script>
@@ -15,6 +16,7 @@
         <script src="js/classes/Player.js" defer></script>
         <script src="js/classes/Population.js" defer></script>
         <script src="js/classes/Log.js" defer></script>
+        <script src="js/classes/Military.js" defer></script>
 
         <script src="js/init.js" defer></script>
     </head>
@@ -27,32 +29,42 @@
 
             <template id="side">
                 <h2>Inventory</h2>
-                <table class="inventory">
+                <table class="inventory display">
                     <tbody>
                         <tr>
-                            <td class="population" colspan="3">
-                                Population: <span class="quantity"></span> / <span class="limit">poop</span>
+                            <td class="population" colspan="4">
+                                Population: <span class="quantity"></span> / <span class="limit"></span>
                             </td>
                         </tr>
                         <tr>
-                            <td data-item="water">Water <span class="quantity">0</span></td>
-                            <td data-item="grain">Grain <span class="quantity">0</span></td>
-                            <td data-item="wood">Wood <span class="quantity">0</span></td>
+                            <td data-item="water">Water<span class="quantity">0</span></td>
+                            <td data-item="grain">Grain<span class="quantity">0</span></td>
+                            <td data-item="wood">Wood<span class="quantity">0</span></td>
+                            <td data-item="cloth">Cloth<span class="quantity">0</span></td>
+                        </tr>
+                        <tr>
+                            <td data-item="ore">Ore<span class="quantity">0</span></td>
+                            <td data-item="iron">Iron<span class="quantity">0</span></td>
+                            <td data-item="alcohol">Alcohol<span class="quantity">0</span></td>
+                        </tr>
+                        <tr>
+                            <td data-item="hut">Hut<span class="quantity">0</span></td>
+                            <td data-item="bread">Bread<span class="quantity">0</span></td>
+                            
+                            <td data-item="livestock">Livestock<span class="quantity">0</span></td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
 
-                        </tr>
+                <h2>In Action</h2>
+                <table class="military display">
+                    <tbody>
                         <tr>
-                            <td data-item="hut">Hut <span class="quantity">0</span></td>
-                            <td></td><td></td>
-                        </tr>
-                        <tr>
-                            <td data-item="bread">Bread <span class="quantity">0</span></td>
-                            <td data-item="ore">Ore <span class="quantity">0</span></td>
-                            <td data-item="livestock">Livestock <span class="quantity">0</span></td>
-                        </tr>
-                        <tr>
-                            <td data-item="footsoldier">Footsoldier <span class="quantity">0</span></td>
-                            <td data-item="horseman">Horseman <span class="quantity">0</span></td>
-                            <td data-item="tank">Tank Driver<span class="quantity">0</span></td>
+                            <td data-role="arsonist">Arsonist<span class="quantity">0</span></td>
+                            <td data-role="footsoldier">Footsoldier<span class="quantity">0</span></td>
+                            <td data-role="horseman">Horseman<span class="quantity">0</span></td>
+                            <td data-role="tank">Tank Driver<span class="quantity">0</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -60,7 +72,7 @@
                 <h2>Occupations</h2>
                 <ul class="occupations control-list">
                     <li class="being-merry" data-job="being-merry">
-                        <span class="name"><strong>Being Merry</strong> (Population +0.5)</span>
+                        <span class="name"><strong>Being Merry</strong> (Population +0.5, Alcohol -1)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                         </span>
@@ -82,7 +94,7 @@
                         </span>
                     </li>
                     <li class="option water-carrier" data-job="water-carrier">
-                        <span class="name"><strong>Water Carrier</strong> (Water +1)</span>
+                        <span class="name"><strong>Water Collector</strong> (Water +1)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="down">-</button>
@@ -97,8 +109,24 @@
                             <button class="up">+</button>
                         </span>
                     </li>
+                    <li class="option weaver" data-job="weaver">
+                        <span class="name"><strong>Weaver</strong> (Cloth +1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
                     <li class="option baker" data-job="baker">
                         <span class="name"><strong>Baker</strong> (Bread +4, Grain -1, Water -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option fermenter" data-job="fermenter">
+                        <span class="name"><strong>Fermenter</strong> (Alcohol +1, Grain -2, Water -1)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="down">-</button>
@@ -113,6 +141,14 @@
                             <button class="up">+</button>
                         </span>
                     </li>
+                    <li class="option refiner" data-job="refiner">
+                        <span class="name"><strong>Refiner</strong> (Iron +1, Ore -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
                     <li class="option rearer" data-job="rearer">
                         <span class="name"><strong>Rearer</strong> (Livestock +1, Grain -10)</span>
                         <span class="buttons">
@@ -121,7 +157,43 @@
                             <button class="up">+</button>
                         </span>
                     </li>
+
+                    <!-- military -->
+                    <hr>
+                    <li class="option military arsonist" data-job="arsonist">
+                        <span class="name"><strong>Arsonist</strong> (Alcohol -2, Cloth -1) (Burn Hut 1)</span>
+                        <span class="buttons">
+                            <span class="quantity"></span>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option military footsoldier" data-job="footsoldier">
+                        <span class="name"><strong>Footsoldier</strong> (Iron -10) (Kill 1)</span>
+                        <span class="buttons">
+                            <span class="quantity"></span>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option military horseman" data-job="horseman">
+                        <span class="name"><strong>Horseman</strong> (Iron -10, Livestock -1) (Kill 3)</span>
+                        <span class="buttons">
+                            <span class="quantity"></span>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option military tank-driver" data-job="tank-driver">
+                        <span class="name"><strong>Tank Driver</strong> (Iron -100) (Kill 10)</span>
+                        <span class="buttons">
+                            <span class="quantity"></span>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
                 </ul>
+                <!--
+                <h2>Combat</h2>
+                <ul class="combat control-list">
+                    
+                </ul>-->
             </template>
             <script type="text/javascript">
                 let left = $('#left');

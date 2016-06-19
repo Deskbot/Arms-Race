@@ -7,15 +7,9 @@ let Bag = function() {
         this.items = function() {
             let items = new Map();
 
-            items.set('water', 0);
-            items.set('grain', 0);
-            items.set('bread', 0);
-            items.set('ore', 0);
-            items.set('wood', 0);
-            items.set('livestock', 0);
-            items.set('footsoldier', 0);
-            items.set('horseman', 0);
-            items.set('tank-driver', 0);
+            for (let i=0; i < Bag.items.length; i++) {
+                items.set(Bag.items[i], 0);
+            }
 
             return items;
         }();
@@ -24,7 +18,7 @@ let Bag = function() {
     }
 
     //attributes
-
+    Bag.items = ['water', 'grain', 'wood', 'ore', 'bread', 'livestock', 'iron', 'alcohol', 'cloth', 'hut'];
 
     //methods
     Bag.prototype.canAlterQuantity = function(item, difference) {

@@ -20,7 +20,7 @@ let Population = function() {
         
         this.setQuantity('being-merry', this.population);
 
-        this.displayPopulation();
+        this.updatePopulation();
     }
 
     //attributes
@@ -31,7 +31,9 @@ let Population = function() {
         let jobs = new Map();
         jobs.set('being-merry', {
             name: 'Being Merry',
+            deathName: 'merry citizen',
             resources: {
+                alcohol: -1,
                 population: 0.5
             }
         });
@@ -63,7 +65,7 @@ let Population = function() {
             }
         });
         jobs.set('water-carrier', {
-            name: 'Water Carrier',
+            name: 'Water Collector',
             resources: {
                 water: 1
             }
@@ -85,6 +87,27 @@ let Population = function() {
                 this.setLimit(this.correctLimit());
             }
         });
+        jobs.set('refiner', {
+            name: 'Refiner',
+            resources: {
+                iron: 1,
+                ore: -1
+            }
+        });
+        jobs.set('fermenter', {
+            name: 'Fermenter',
+            resources: {
+                alcohol: 1,
+                grain: -2,
+                water: -1
+            }
+        });
+        jobs.set('weaver', {
+            name: 'Weaver',
+            resources: {
+                cloth: 1
+            }
+        });
 
         return jobs;
     }();
@@ -102,14 +125,20 @@ let Population = function() {
         this.limitElem.html(this.limit);
     };
     Population.prototype.alter = function(change) {
+        let maxPopulation = this.owner.bag.getQuantity('hut') * Population.hutSize;
         let newPopulation = this.population + change;
-        
-        if (newPopulation <= this.owner.bag.getQuantity('hut')) {
-            this.alterQuantity('being-merry', change);
-            this.displayPopulation();
+
+        if (newPopulation > maxPopulation) {
+            newPopulation = maxPopulation;
+            change = newPopulation - this.population;
         }
+
+        this.population = newPopulation;
+        
+        this.alterQuantity('being-merry', change);
+        this.updatePopulation();
     };
-    Population.prototype.displayPopulation = function() {
+    Population.prototype.updatePopulation = function() {
         this.populationQtyElem.html(this.population);
     };
     Population.prototype.getQuantity = function(job) {
@@ -133,9 +162,9 @@ let Population = function() {
         if (this.getQuantity('being-merry') >= 1) {
             this.setQuantity(job, this.workers.get(job) + 1);
             this.alterQuantity('being-merry', -1);
-            this.setQuantity('being-merry', this.getQuantity('being-merry'));
+            //this.setQuantity('being-merry', this.getQuantity('being-merry'));
 
-            this.updateQuantity(job);
+            //this.updateQuantity(job);
         }
     }
 
@@ -143,9 +172,9 @@ let Population = function() {
         if (this.getQuantity(job) >= 1) {
             this.setQuantity(job, this.workers.get(job) - 1);
             this.alterQuantity('being-merry', 1);
-            this.setQuantity('being-merry', this.getQuantity('being-merry'));
+            //this.setQuantity('being-merry', this.getQuantity('being-merry'));
 
-            this.updateQuantity(job);
+            //this.updateQuantity(job);
         }
     };
 
@@ -161,7 +190,28 @@ let Population = function() {
         return this.workers.get(job);
     };
 
-    
+    Population.prototype.killRandom = function() {
+        let workerNumber = Math.floor(Math.random() * this.population);
+        let totalSoFar = 0;
+        let vicitm;
+
+        for (let job of this.workers.keys()) {
+            totalSoFar += this.getQuantity(job);
+
+            if (workerNumber < totalSoFar) {
+                vicitm = job;
+            }
+        }
+
+        this.kill(job);
+
+        return job;
+    }
+
+    Population.prototype.kill = function(job) {
+        this.alterQuantity(job, -1);
+        this.alter(-1);
+    }
 
 
 
