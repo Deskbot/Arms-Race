@@ -1,5 +1,5 @@
 body {
-    
+    background-color: #FFDDDD;
 }
 
 main {
@@ -8,6 +8,10 @@ main {
 }
 
 hr {
+    border-color: rgba(0,0,0,0.5);
+    border-style: dashed;
+    border-width: 1px;
+
     margin: 3px 0 2px 0;
 }
 
@@ -25,8 +29,19 @@ strong {
     font-weight: bold;
 }
 
+#blue-layer {
+    height: 100%;
+    background: #DDDDFF;
+    float: right;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 50%;
+    z-index: -10;
+}
+
 #log {
-    background-color: #EEEEEE;
+    background-color: rgba(0,0,0, 0.12);
     border-color: black;
     border-width: 1px 0;
     border-style: solid;
@@ -37,12 +52,21 @@ strong {
 }
 
 #log li {
+    text-align: center;
     width: 100%;
+}
+
+#log li.player1 {
+    color: red;
+}
+
+#log li.player2 {
+    color: blue;
 }
 
 .screen-side {
     display: inline-block;
-    background: #EEEEEE;
+    background-color: rgba(0,0,0, 0.12);
     border-color: black;
     border-style: solid;
     border-width: 0 1px;
@@ -64,6 +88,7 @@ strong {
 /* display tables */
 
 .screen-side .display {
+    background-color: rgba(255,255,255,0.5);
     border-collapse: collapse;
     margin-bottom: 10px;
     width: 100%;
@@ -97,10 +122,25 @@ strong {
 /* options list */
 
 .control-list > .option {
+    border: none;
+    padding: 3px 2px 2px 2px;
     border-width: 1px;
     border-style: solid;
-    border-color: white;
+    border-color: rgba(0,0,0,0);
+}
+
+.control-list > .option.selected {
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 4px;
     padding: 3px 2px 2px 2px;
+}
+
+#left > .control-list > .option.selected {
+    border-color: #880000;
+}
+
+#right > .control-list > .option.selected {
+    border-color: #000088;
 }
 
 .control-list > li > .buttons {
@@ -118,10 +158,10 @@ strong {
     width: 15px;
 }
 
-#left > .control-list > .option.selected {
-    border-color: #FF0000;
+.control-list > .option button.up.pressed {
+    background-color: #CCEECC;
 }
 
-#right > .control-list > .option.selected {
-    border-color: #0000FF;
+.control-list > .option button.down.pressed {
+    background-color: #DDDDDD;
 }

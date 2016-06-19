@@ -50,13 +50,17 @@ let Controller = function() {
 
         if (Military.roles.hasOwnProperty(option)) {
             let resources = Military.roles[option].resources;
+            let enoughMaterials = true;
 
             for (let item in resources) {
-                if (this.owner.bag.getQuantity(item) + resources[item] >= 0) {
-                    this.owner.military.increase(option);
-                } else {
-                    break; //not enough materials
+                if (!(this.owner.bag.getQuantity(item) + resources[item] >= 0)) {
+                    enoughMaterials = false;
+                    break;
                 }
+            }
+
+            if (enoughMaterials) {
+                this.owner.military.increase(option);
             }
             
         } else {

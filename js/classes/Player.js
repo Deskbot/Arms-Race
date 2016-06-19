@@ -14,7 +14,7 @@ let Player = function() {
     }
 
     //attributes
-    
+        
 
 
     //methods
@@ -23,7 +23,11 @@ let Player = function() {
     }
 
     Player.prototype.getOpponent = function() {
-        return this.game.getPlayer(this.number === 1 ? 2 : 1);
+        if (typeof this.opponent === 'undefined') {
+            this.opponent = this.game.getPlayer(this.number === 1 ? 2 : 1);
+        }
+        
+        return this.opponent;
     }
 
 

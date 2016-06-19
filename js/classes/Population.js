@@ -83,8 +83,8 @@ let Population = function() {
                 wood: -10,
                 hut: 1
             },
-            event: function() { //requires binding to the population
-                this.setLimit(this.correctLimit());
+            event: function() {//needs binding to a population
+                this.correctLimit();
             }
         });
         jobs.set('refiner', {
@@ -105,7 +105,14 @@ let Population = function() {
         jobs.set('weaver', {
             name: 'Weaver',
             resources: {
+                cotton: -1,
                 cloth: 1
+            }
+        });
+        jobs.set('cotton-picker', {
+            name: 'Cotton Picker',
+            resources: {
+                cotton: 1
             }
         });
 
@@ -115,7 +122,7 @@ let Population = function() {
 
     //methods
     Population.prototype.correctLimit = function() {
-        return this.owner.bag.getQuantity('hut') * Population.hutSize;
+        this.setLimit(this.owner.bag.getQuantity('hut') * Population.hutSize);
     }
     Population.prototype.setLimit = function(limit) {
         this.limit = limit;
@@ -150,7 +157,7 @@ let Population = function() {
         this.updateQuantity(job);
     };
     Population.prototype.alterQuantity = function(job, number) {
-        let currentQty = this.workers.get(job);
+        let currentQty = this.getQuantity(job);
         this.setQuantity(job, currentQty + number);
         this.updateQuantity(job);
     }
@@ -179,7 +186,7 @@ let Population = function() {
     };
 
     Population.prototype.inJob = function(job) {
-        if (typeof job === undefined) {
+        if (typeof job === 'undefined') {
             let total = 0;
             for (let val of this.workers.values()) {
                 total += val;
@@ -191,28 +198,68 @@ let Population = function() {
     };
 
     Population.prototype.killRandom = function() {
-        let workerNumber = Math.floor(Math.random() * this.population);
+        let workerNumber = Math.floor(Math.random() * (this.population - this.owner.military.totalActive()));
         let totalSoFar = 0;
-        let vicitm;
+        let victim;
+
+        console.log('debug:', this.owner.military.totalActive(), this.population, workerNumber);
 
         for (let job of this.workers.keys()) {
+            console.log(workerNumber, totalSoFar);
             totalSoFar += this.getQuantity(job);
 
             if (workerNumber < totalSoFar) {
-                vicitm = job;
+                victim = job;
+                break;
             }
         }
 
-        this.kill(job);
+        if (typeof victim === 'undefined') {
+            return this.killRandom();
+        }
 
-        return job;
+        this.kill(victim, 1);
+
+        return victim;
     }
 
-    Population.prototype.kill = function(job) {
-        this.alterQuantity(job, -1);
-        this.alter(-1);
+    Population.prototype.kill = function(job, qty) {
+        let deathName;
+        
+        try {
+            if (Military.roles.hasOwnProperty(job)) {
+                this.owner.military.killInAction(job, qty);
+                deathName = typeof Military.roles[job].deathName === 'undefined' ? Military.roles[job].name : Military.roles[job].deathName;
+            } else {
+                this.alterQuantity(job, -qty);
+                this.population -= qty;//this is done in the military class for millitary roles
+                this.updatePopulation();
+                deathName = typeof Population.jobs.get(job).deathName === 'undefined' ? Population.jobs.get(job).name : Population.jobs.get(job).deathName;
+            }
+        } catch (e) {
+            console.log(deathName, job);
+        }
+        
+        this.owner.game.log.put(qty + " of " + this.owner.getClass() + "'s " + deathName + " was killed.", this.owner);
     }
 
+    Population.prototype.killsToDo = function(obj) {
+        console.log(obj);
+        for (let role in obj) {
+            
+            if (role === 'civilian') {
+                
+                for (let i=0; i < obj[role]; i++) {
+                    console.log(this.killRandom());
+                }
+                
+            } else {
+                if (obj[role] > 0) {
+                    this.kill(role, obj[role]);
+                }
+            }
+        }
+    }
 
 
     return Population;

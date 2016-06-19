@@ -18,7 +18,7 @@ let Bag = function() {
     }
 
     //attributes
-    Bag.items = ['water', 'grain', 'wood', 'ore', 'bread', 'livestock', 'iron', 'alcohol', 'cloth', 'hut'];
+    Bag.items = ['water', 'grain', 'wood', 'ore', 'bread', 'livestock', 'iron', 'alcohol', 'cloth', 'hut', 'cotton'];
 
     //methods
     Bag.prototype.canAlterQuantity = function(item, difference) {

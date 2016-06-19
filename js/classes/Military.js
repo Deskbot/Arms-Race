@@ -99,14 +99,15 @@ let Military = function() {
         //add to log
         let jobData = Population.jobs.get(job);
         let deathName = typeof jobData.deathName !== 'undefined' ? jobData.deathName : jobData.name;
-        this.owner.game.log.put(opponent.getClass() + "'s " + deathName + " was killed.");
+        this.owner.game.log.put(opponent.getClass() + "'s " + deathName + " was killed.", this.owner);
 
         game.stopTime(); //provisional
 
     };
     Military.prototype.killInAction = function(role, qty) {
-        this.updateInAction(role, -qty);
-        this.owner.population.alter(-1);
+        this.alterInAction(role, -qty);
+        this.owner.population.population -= qty;
+        this.owner.population.updatePopulation();
     };
     Military.prototype.increase = function(role) {
         if (this.owner.population.getQuantity('being-merry') >= 1) {
@@ -121,12 +122,17 @@ let Military = function() {
     Military.prototype.getNumActive = function(role) {
         return this.inAction[role];
     }
-    Military.prototype.alterInAction = function(role, diff) {
-        this.inAction[role] -= amount;
+    Military.prototype.totalActive = function() {
+        return this.inAction.arsonist + this.inAction.footsoldier + this.inAction.horseman + this.inAction['tank-driver']
+    }
+
+    Military.prototype.alterInAction = function(role, amount) {
+        this.inAction[role] += amount;
         this.updateInAction(role);
     }
     Military.prototype.updateInAction = function(role) {
         this.inActionElem.find('[data-role=' + role + ']').children('.quantity').html(this.inAction[role]);
+        this.owner.side.find('.military[data-job=' + role + ']').children('.buttons').children('.quantity').html(this.inAction[role]);
     }
 
 

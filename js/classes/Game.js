@@ -2,6 +2,7 @@ let Game = function() {
     //constructor
     function Game(container, speed) {
         this.container = container;
+        this.blueLayer = $('#blue-layer');
         this.player1 = new Player(this, 1);
         this.player2 = new Player(this, 2);
         this.log = new Log(this);
@@ -77,68 +78,125 @@ let Game = function() {
         return number === 1 || number === 2 ? this['player' + number] : undefined;
     }
 
+    Game.prototype.updateScreen = function() {
+        let percent = this.player2.population.population / (this.player1.population.population + this.player2.population.population);
+        this.blueLayer.css('width', percent * 100 + "%");
+    }
+
     Game.prototype.advance = function() {
         this.advancePlayer(this.player1);
         this.advancePlayer(this.player2);
+
+        this.player1.population.killsToDo(this.player2.military.kills);
+        this.player2.population.killsToDo(this.player1.military.kills);
+
+        this.updateScreen();
+
+        this.checkWinner();
     }
 
     Game.prototype.advancePlayer = function(player) {
         this.advancePlayerItems(player);
         this.advancePlayerMilitary(player);
-        this.checkWinner();
     }
 
     Game.prototype.advancePlayerMilitary = function(player) {
         let military = player.military;
-        let bag = player.bag;
         let opponent = player.getOpponent();
 
-        //pay the cost
+        //arson
 
-        for (let role in military.inAction) {
-            
-            let roleData = Military.roles[role];
-            let active = military.getNumActive(role);
-
-            let possibleMultipliers = [active];
-
-            for (let item in roleData.resources) {
-                let change = Math.floor(roleData.resources[item] * active);
-                
-                if (roleData.resources[item] < 0) {
-                    //add to the possibilities the number of times (rounded down divide) the amount can subtract from the number of items
-                    possibleMultipliers.push( Math.floor(bag.getQuantity(item) / Math.abs(roleData.resources[item])) );
-                }
+        let arsonists = military.getNumActive('arsonist');
+        if (arsonists > 0) {
+            let opponentHutQty = opponent.bag.getQuantity('hut');
+            if (arsonists > opponentHutQty) {
+                arsonists = opponentHutQty;
             }
 
-            let multiplier = possibleMultipliers.min();
-
-            if (multiplier !== 0) { //changes are to be made
-                for (let item in roleData.resources) {
-                    bag.alterQuantity(item, roleData.resources[item] * multiplier);
-                }
-
-                //put effect into effect
-
-                for (let effectItem in roleData.effect) {
-                    if (effectItem === 'population') { //special case
-                        //opponent.population.alter(roleData.effect.population * multiplier);
-                        military.kill(role, multiplier * roleData.effect[effectItem]);
-                    } else {
-                        opponent.bag.alterQuantity(roleData.effect[effectItem] * multiplier);
-                    }
-
-                    // activate event
-
-                    if (typeof roleData.event === 'function') {
-                        roleData.event.bind(player.military)();
-                    }
-                }
-
-            }
+            opponent.bag.alterQuantity('hut', -arsonists);
+            opponent.population.correctLimit();
+            military.killInAction('arsonist', arsonists);
         }
 
+        //kills
 
+        let kills = {
+            'tank-driver': 0,
+            horseman: 0,
+            footsoldier: 0,
+            arsonist: 0,
+            civilian: 0
+        }
+
+        //console.log(military.getNumActive('tank-driver'), military.getNumActive('horseman'), military.getNumActive('footsoldier'), military.getNumActive('arsonist'));
+        //console.log(opponent.military.getNumActive('tank-driver'), opponent.military.getNumActive('horseman'), opponent.military.getNumActive('footsoldier'), opponent.military.getNumActive('arsonist'));
+
+        //tanks
+        let deadHorsemen, deadFootsoldiers, deadArsonists, deadCivilians;
+
+        let tanks = military.getNumActive('tank-driver');
+        let tankKillsLeft = Math.abs(tanks * Military.roles['tank-driver'].effect.population);
+
+        deadTankDrivers = [opponent.military.getNumActive('tank-driver'), tankKillsLeft].min();
+        tankKillsLeft -= deadTankDrivers;
+        deadHorsemen = [opponent.military.getNumActive('horseman'), tankKillsLeft].min();
+        tankKillsLeft -= deadHorsemen;
+        deadFootsoldiers = [opponent.military.getNumActive('footsoldier'), tankKillsLeft].min();
+        tankKillsLeft -= deadFootsoldiers;
+        deadArsonists = [opponent.military.getNumActive('arsonist'), tankKillsLeft].min();
+        tankKillsLeft -= deadArsonists;
+
+        deadCivilians = [tankKillsLeft, opponent.population.population].min();
+
+        kills['tank-driver'] += deadTankDrivers;
+        kills.horseman += deadHorsemen;
+        kills.footsoldier += deadFootsoldiers;
+        kills.arsonist += deadArsonists;
+        kills.civilian += deadCivilians;
+
+        //horsemen
+
+        let horsemen = military.getNumActive('horseman');
+        let horsemanKillsLeft = Math.abs(horsemen * Military.roles['horseman'].effect.population);
+
+        deadHorsemen = [opponent.military.getNumActive('horseman'), horsemanKillsLeft].min();
+        horsemanKillsLeft -= deadHorsemen;
+        deadFootsoldiers = [opponent.military.getNumActive('footsoldier'), horsemanKillsLeft].min();
+        horsemanKillsLeft -= deadFootsoldiers;
+        deadArsonists = [opponent.military.getNumActive('arsonist'), horsemanKillsLeft].min();
+        horsemanKillsLeft -= deadArsonists;
+
+        deadCivilians = [horsemanKillsLeft, opponent.population.population].min();
+
+        kills.horseman += deadHorsemen;
+        kills.footsoldier += deadFootsoldiers;
+        kills.arsonist += deadArsonists;
+        kills.civilian += deadCivilians;
+        
+
+        //footsoldier
+
+        let footsoldiers = military.getNumActive('footsoldier');
+        let footsoldierKillsLeft = Math.abs(footsoldiers * Military.roles['footsoldier'].effect.population);
+        //console.log(footsoldierKillsLeft, footsoldiers)
+
+        deadFootsoldiers = [opponent.military.getNumActive('footsoldier'), footsoldierKillsLeft].min();
+        //console.log(deadFootsoldiers, opponent.military.getNumActive('footsoldier'), footsoldierKillsLeft);
+        footsoldierKillsLeft -= deadFootsoldiers;
+        
+        deadArsonists = [opponent.military.getNumActive('arsonist'), footsoldierKillsLeft].min();
+        footsoldierKillsLeft -= deadArsonists;
+        //console.log(deadArsonists);
+        deadCivilians = [footsoldierKillsLeft, opponent.population.population].min();
+
+        kills.footsoldier += deadFootsoldiers;
+        kills.arsonist += deadArsonists;
+        kills.civilian += deadCivilians;
+        
+
+
+
+        military.kills = kills;
     }
 
     Game.prototype.advancePlayerItems = function(player) {
@@ -216,4 +274,66 @@ let Game = function() {
 Game.prototype.displayInterface = function() {
     let occupationsElem = this.container.find('.occupations').html(Occupations.buildInterface());
 }
+*/
+
+
+
+
+
+
+/*
+
+Game.prototype.advancePlayerMilitary = function(player) {
+    let military = player.military;
+    let bag = player.bag;
+    let opponent = player.getOpponent();
+
+    //pay the cost
+
+    for (let role in military.inAction) {
+        
+        let roleData = Military.roles[role];
+        let active = military.getNumActive(role);
+
+        let possibleMultipliers = [active];
+
+        for (let item in roleData.resources) {
+            let change = Math.floor(roleData.resources[item] * active);
+            
+            if (roleData.resources[item] < 0) {
+                //add to the possibilities the number of times (rounded down divide) the amount can subtract from the number of items
+                possibleMultipliers.push( Math.floor(bag.getQuantity(item) / Math.abs(roleData.resources[item])) );
+            }
+        }
+
+        let multiplier = possibleMultipliers.min();
+
+        if (multiplier !== 0) { //changes are to be made
+            for (let item in roleData.resources) {
+                bag.alterQuantity(item, roleData.resources[item] * multiplier);
+            }
+
+            //put effect into effect
+
+            for (let effectItem in roleData.effect) {
+                if (effectItem === 'population') { //special case
+                    //opponent.population.alter(roleData.effect.population * multiplier);
+                    military.kill(role, multiplier * roleData.effect[effectItem]);
+                } else {
+                    opponent.bag.alterQuantity(roleData.effect[effectItem] * multiplier);
+                }
+
+                // activate event
+
+                if (typeof roleData.event === 'function') {
+                    roleData.event.bind(player.military)();
+                }
+            }
+
+        }
+    }
+
+
+}
+
 */
