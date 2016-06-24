@@ -2,14 +2,14 @@ let Population = function() {
     //constructor
     function Population(owner) {
         this.owner = owner;
-        this.population = 5;
+        this.population = Population.hutSize * Bag.startingHutQuantity;
 
         //elements
         this.populationElem = this.owner.side.find('.population');
         this.populationQtyElem = this.populationElem.children('.quantity');
         this.limitElem = this.populationElem.children('.limit');
 
-        this.setLimit(Population.hutSize);
+        this.setLimit(this.population);
 
         this.workers = new Map();
 
@@ -24,7 +24,7 @@ let Population = function() {
     }
 
     //attributes
-    Population.prototype.limit = 5;
+    Population.prototype.limit = 10;
     Population.hutSize = 5;
 
     Population.jobs = function() {
@@ -73,14 +73,14 @@ let Population = function() {
         jobs.set('rearer', {
             name: 'Rearer',
             resources: {
-                grain: -10,
+                grain: -30,
                 livestock: 1
             }
         });
         jobs.set('builder', {
             name: 'Builder',
             resources: {
-                wood: -10,
+                wood: -30,
                 hut: 1
             },
             event: function() {//needs binding to a population
@@ -91,7 +91,8 @@ let Population = function() {
             name: 'Refiner',
             resources: {
                 iron: 1,
-                ore: -1
+                ore: -1,
+                bread: -1
             }
         });
         jobs.set('fermenter', {
@@ -113,6 +114,41 @@ let Population = function() {
             name: 'Cotton Picker',
             resources: {
                 cotton: 1
+            }
+        });
+        jobs.set('butcher', {
+            name: 'Butcher',
+            resources: {
+                meat: 4,
+                livestock: -1
+            }
+        });
+        jobs.set('super-logger', {
+            name: 'Super Logger',
+            resources: {
+                meat: -1,
+                wood: 20
+            }
+        });
+        jobs.set('super-farmer', {
+            name: 'Super Farmer',
+            resources: {
+                meat: -1,
+                grain: 20
+            }
+        });
+        jobs.set('super-water-carrier', {
+            name: 'Super Water Collector',
+            resources: {
+                meat: -1,
+                water: 20
+            }
+        });
+        jobs.set('super-miner', {
+            name: 'Super Miner',
+            resources: {
+                meat: -1,
+                ore: 20
             }
         });
 
@@ -202,10 +238,10 @@ let Population = function() {
         let totalSoFar = 0;
         let victim;
 
-        console.log('debug:', this.owner.military.totalActive(), this.population, workerNumber);
+        //console.log('debug:', this.owner.military.totalActive(), this.population, workerNumber);
 
         for (let job of this.workers.keys()) {
-            console.log(workerNumber, totalSoFar);
+            //console.log(workerNumber, totalSoFar);
             totalSoFar += this.getQuantity(job);
 
             if (workerNumber < totalSoFar) {
@@ -237,14 +273,14 @@ let Population = function() {
                 deathName = typeof Population.jobs.get(job).deathName === 'undefined' ? Population.jobs.get(job).name : Population.jobs.get(job).deathName;
             }
         } catch (e) {
-            console.log(deathName, job);
+            //console.log(deathName, job);
         }
         
-        this.owner.game.log.put(qty + " of " + this.owner.getClass() + "'s " + deathName + " was killed.", this.owner);
+        this.owner.game.log.put(this.owner.getClass() + "'s " + deathName + " was killed. x" + qty, this.owner);
     }
 
     Population.prototype.killsToDo = function(obj) {
-        console.log(obj);
+        //console.log(obj);
         for (let role in obj) {
             
             if (role === 'civilian') {

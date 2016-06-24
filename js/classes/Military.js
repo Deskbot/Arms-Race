@@ -18,8 +18,9 @@ let Military = function() {
             name: 'Arsonist',
             strength: 0,
             resources: {
-                alcohol: -2,
-                cloth: -1
+                alcohol: -5,
+                cloth: -5,
+                wood: -10
             },
             effect: {
                 hut: -1
@@ -32,20 +33,22 @@ let Military = function() {
             name: 'Footsoldier',
             strength: 1,
             resources: {
-                iron: -10
+                iron: -20,
+                cloth: 5
             },
             effect: {
-                population: -1
+                population: -2
             }
         },
         horseman: {
             name: 'Horseman',
             strength: 2,
             resources: {
-                iron: -10
+                iron: -10,
+                cloth: -10
             },
             effect: {
-                population: -3
+                population: -5
             }
         },
         "tank-driver": {
@@ -134,7 +137,12 @@ let Military = function() {
         this.inActionElem.find('[data-role=' + role + ']').children('.quantity').html(this.inAction[role]);
         this.owner.side.find('.military[data-job=' + role + ']').children('.buttons').children('.quantity').html(this.inAction[role]);
     }
-
+    Military.prototype.removeAll = function() {
+        for (let role in this.inAction) {
+            this.inAction[role] = 0;
+            this.updateInAction(role);
+        }
+    }
 
 
     return Military;

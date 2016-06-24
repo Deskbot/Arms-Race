@@ -27,6 +27,8 @@ let Game = function() {
         this.player1.bag.setQuantity('iron', 1000);
         this.player1.bag.setQuantity('hut', 1000);
         this.player1.bag.setQuantity('cloth', 1000);
+        this.player1.bag.setQuantity('meat', 1000);
+        this.player1.bag.setQuantity('cotton', 1000);
         this.player1.population.alter(1000);
         this.player1.population.setLimit(5000);
         
@@ -41,6 +43,8 @@ let Game = function() {
         this.player2.bag.setQuantity('iron', 1000);
         this.player2.bag.setQuantity('hut', 1000);
         this.player2.bag.setQuantity('cloth', 1000);
+        this.player2.bag.setQuantity('meat', 1000);
+        this.player2.bag.setQuantity('cotton', 1000);
         this.player2.population.alter(1000);
         this.player2.population.setLimit(5000);
         
@@ -89,6 +93,30 @@ let Game = function() {
 
         this.player1.population.killsToDo(this.player2.military.kills);
         this.player2.population.killsToDo(this.player1.military.kills);
+
+        console.log(this.player1.military.kills);
+        console.log(this.player2.military.kills);
+
+        //total kills
+        for (let key in this.player1.military.kills) {
+            console.log(this.player1.military.kills[key]);
+            if (this.player1.military.kills[key] > 0) {
+                shake($('body'),0,0,500,75,4);
+                console.log('it shakes');
+                break;
+            }
+        }
+        for (let key in this.player2.military.kills) {
+            console.log(this.player2.military.kills[key]);
+            if (this.player2.military.kills[key] > 0) {
+                shake($('body'),0,0,500,75,4);
+                console.log('it shakes');
+                break;
+            }
+        }
+
+        this.player1.military.removeAll();
+        this.player2.military.removeAll();
 
         this.updateScreen();
 

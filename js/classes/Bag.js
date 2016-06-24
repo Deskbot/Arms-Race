@@ -14,11 +14,12 @@ let Bag = function() {
             return items;
         }();
 
-        this.setQuantity('hut', 1);
+        this.setQuantity('hut', Bag.startingHutQuantity);
     }
 
     //attributes
-    Bag.items = ['water', 'grain', 'wood', 'ore', 'bread', 'livestock', 'iron', 'alcohol', 'cloth', 'hut', 'cotton'];
+    Bag.startingHutQuantity = 2;
+    Bag.items = ['water', 'grain', 'wood', 'ore', 'bread', 'livestock', 'iron', 'alcohol', 'cloth', 'hut', 'cotton', 'meat'];
 
     //methods
     Bag.prototype.canAlterQuantity = function(item, difference) {

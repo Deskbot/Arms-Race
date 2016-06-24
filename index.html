@@ -38,24 +38,22 @@
                             </td>
                         </tr>
                         <tr>
-                            <td data-item="water">Water<span class="quantity">0</span></td>
-                            <td data-item="grain">Grain<span class="quantity">0</span></td>
-                            <td data-item="wood">Wood<span class="quantity">0</span></td>
-                            <td data-item="cotton">Cotton<span class="quantity">0</span></td>
-                            
-                        </tr>
-                        <tr>
                             <td data-item="alcohol">Alcohol<span class="quantity">0</span></td>
                             <td data-item="bread">Bread<span class="quantity">0</span></td>
-                            <td data-item="livestock">Livestock<span class="quantity">0</span></td>
                             <td data-item="cloth">Cloth<span class="quantity">0</span></td>
+                            <td data-item="cotton">Cotton<span class="quantity">0</span></td>
                         </tr>
                         <tr>
+                            <td data-item="grain">Grain<span class="quantity">0</span></td>
                             <td data-item="hut">Hut<span class="quantity">0</span></td>
-                            <td data-item="ore">Ore<span class="quantity">0</span></td>
                             <td data-item="iron">Iron<span class="quantity">0</span></td>
-
-                            
+                            <td data-item="livestock">Livestock<span class="quantity">0</span></td>
+                        </tr>
+                        <tr>
+                            <td data-item="meat">Meat<span class="quantity">0</span></td>
+                            <td data-item="ore">Ore<span class="quantity">0</span></td>
+                            <td data-item="water">Water<span class="quantity">0</span></td>
+                            <td data-item="wood">Wood<span class="quantity">0</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -80,22 +78,6 @@
                             <span class="quantity">0</span>
                         </span>
                     </li>
-                    <li class="option baker" data-job="baker">
-                        <span class="name"><strong>Baker</strong> (Bread +4, Grain -1, Water -1)</span>
-                        <span class="buttons">
-                            <span class="quantity">0</span>
-                            <button class="down">-</button>
-                            <button class="up">+</button>
-                        </span>
-                    </li>
-                    <li class="option builder" data-job="builder">
-                        <span class="name"><strong>Builder</strong> (Hut +1, Wood -10)</span>
-                        <span class="buttons">
-                            <span class="quantity">0</span>
-                            <button class="down">-</button>
-                            <button class="up">+</button>
-                        </span>
-                    </li>
                     <li class="option cotton-picker" data-job="cotton-picker">
                         <span class="name"><strong>Cotton Picker</strong> (Cotton +1)</span>
                         <span class="buttons">
@@ -112,16 +94,53 @@
                             <button class="up">+</button>
                         </span>
                     </li>
-                    <li class="option fermenter" data-job="fermenter">
-                        <span class="name"><strong>Fermenter</strong> (Alcohol +1, Grain -2, Water -1)</span>
+
+                    <li class="option logger" data-job="logger">
+                        <span class="name"><strong>Logger</strong> (Wood +1)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="down">-</button>
                             <button class="up">+</button>
                         </span>
                     </li>
-                    <li class="option logger" data-job="logger">
-                        <span class="name"><strong>Logger</strong> (Wood +1)</span>
+
+                    <li class="option water-carrier" data-job="water-carrier">
+                        <span class="name"><strong>Water Collector</strong> (Water +1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    
+                    <li class="option baker" data-job="baker">
+                        <span class="name"><strong>Baker</strong> (Bread +4, Grain -1, Water -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option builder" data-job="builder">
+                        <span class="name"><strong>Builder</strong> (Hut +1, Wood -30)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option butcher" data-job="butcher">
+                        <span class="name"><strong>Butcher</strong> (Meat +4, Livestock -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    
+                    
+                    <li class="option fermenter" data-job="fermenter">
+                        <span class="name"><strong>Fermenter</strong> (Alcohol +1, Grain -2, Water -1)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="down">-</button>
@@ -137,8 +156,9 @@
                             <button class="up">+</button>
                         </span>
                     </li>
+                    
                     <li class="option rearer" data-job="rearer">
-                        <span class="name"><strong>Rearer</strong> (Livestock +1, Grain -10)</span>
+                        <span class="name"><strong>Rearer</strong> (Livestock +1, Grain -30)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="down">-</button>
@@ -146,25 +166,48 @@
                         </span>
                     </li>
                     <li class="option refiner" data-job="refiner">
-                        <span class="name"><strong>Refiner</strong> (Iron +1, Ore -1)</span>
+                        <span class="name"><strong>Refiner</strong> (Iron +1, Ore -1, Bread -1)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="down">-</button>
                             <button class="up">+</button>
                         </span>
                     </li>
-                    <li class="option water-carrier" data-job="water-carrier">
-                        <span class="name"><strong>Water Collector</strong> (Water +1)</span>
-                        <span class="buttons">
-                            <span class="quantity">0</span>
-                            <button class="down">-</button>
-                            <button class="up">+</button>
-                        </span>
-                    </li>
-
                     
                     <li class="option weaver" data-job="weaver">
                         <span class="name"><strong>Weaver</strong> (Cloth +1, Cotton -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option super-farmer" data-job="super-farmer">
+                        <span class="name"><strong>Super Farmer</strong> (Grain +20, Meat -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option super-logger" data-job="super-logger">
+                        <span class="name"><strong>Super Logger</strong> (Wood +20, Meat -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option super-water-carrier" data-job="super-water-carrier">
+                        <span class="name"><strong>Super Water Collector</strong> (Water +20, Meat -1)</span>
+                        <span class="buttons">
+                            <span class="quantity">0</span>
+                            <button class="down">-</button>
+                            <button class="up">+</button>
+                        </span>
+                    </li>
+                    <li class="option super-miner" data-job="super-miner">
+                        <span class="name"><strong>Super Miner</strong> (Ore +20, Meat -1)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="down">-</button>
@@ -176,21 +219,21 @@
                     <!-- military -->
                     <hr>
                     <li class="option military arsonist" data-job="arsonist">
-                        <span class="name"><strong>Arsonist</strong> (Alcohol -2, Cloth -1, Arsonist -1) (Burn Hut 1)</span>
+                        <span class="name"><strong>Arsonist</strong> (Alcohol -5, Cloth -5, Wood -10) (Burn Hut 1)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="up">+</button>
                         </span>
                     </li>
                     <li class="option military footsoldier" data-job="footsoldier">
-                        <span class="name"><strong>Footsoldier</strong> (Iron -10) (Kill 1)</span>
+                        <span class="name"><strong>Footsoldier</strong> (Iron -20, Cloth -5) (Kill 2)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="up">+</button>
                         </span>
                     </li>
                     <li class="option military horseman" data-job="horseman">
-                        <span class="name"><strong>Horseman</strong> (Iron -10, Livestock -1) (Kill 3)</span>
+                        <span class="name"><strong>Horseman</strong> (Iron -10, Cloth -10, Livestock -1) (Kill 5)</span>
                         <span class="buttons">
                             <span class="quantity">0</span>
                             <button class="up">+</button>

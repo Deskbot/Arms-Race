@@ -10,6 +10,9 @@ function steadyGo() {
     let body = $('body');
 
     body.keydown(function(event) {
+        if (event.which == 53) {
+            game.greatState();
+        }
 
         switch(event.which) {
             //traversing options

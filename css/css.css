@@ -1,5 +1,11 @@
+@import url(https://fonts.googleapis.com/css?family=Noto+Serif:400,700);
+
 body {
     background-color: #FFDDDD;
+    font-family: 'Noto Serif';
+    font-size: 15px;
+    overflow: hidden;
+    position: relative;
 }
 
 main {
@@ -121,9 +127,9 @@ strong {
 
 /* options list */
 
-.control-list > .option {
+.control-list > .option, .control-list > .being-merry {
     border: none;
-    padding: 3px 2px 2px 2px;
+    padding: 3px 3px 3px 5px;
     border-width: 1px;
     border-style: solid;
     border-color: rgba(0,0,0,0);
@@ -132,7 +138,7 @@ strong {
 .control-list > .option.selected {
     background-color: rgba(255,255,255,0.5);
     border-radius: 4px;
-    padding: 3px 2px 2px 2px;
+    
 }
 
 #left > .control-list > .option.selected {
