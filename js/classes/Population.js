@@ -130,6 +130,13 @@ let Population = function() {
                 wood: 20
             }
         });
+        jobs.set('super-cotton-picker', {
+            name: 'Super Cotton Picker',
+            resources: {
+                meat: -1,
+                cotton: 20
+            }
+        });
         jobs.set('super-farmer', {
             name: 'Super Farmer',
             resources: {
