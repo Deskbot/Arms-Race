@@ -174,8 +174,6 @@ let Game = function() {
         tankKillsLeft -= deadHorsemen;
         deadFootsoldiers = [opponent.military.getNumActive('footsoldier'), tankKillsLeft].min();
         tankKillsLeft -= deadFootsoldiers;
-        deadArsonists = [opponent.military.getNumActive('arsonist'), tankKillsLeft].min();
-        tankKillsLeft -= deadArsonists;
 
         deadCivilians = [tankKillsLeft, opponent.population.population].min();
 
@@ -199,8 +197,6 @@ let Game = function() {
         horsemanKillsLeft -= deadHorsemen;
         deadFootsoldiers = [opponent.military.getNumActive('footsoldier'), horsemanKillsLeft].min();
         horsemanKillsLeft -= deadFootsoldiers;
-        deadArsonists = [opponent.military.getNumActive('arsonist'), horsemanKillsLeft].min();
-        horsemanKillsLeft -= deadArsonists;
 
         deadCivilians = [horsemanKillsLeft, opponent.population.population].min();
 
@@ -222,8 +218,6 @@ let Game = function() {
         deadFootsoldiers = [opponent.military.getNumActive('footsoldier'), footsoldierKillsLeft].min();
         footsoldierKillsLeft -= deadFootsoldiers;
         
-        deadArsonists = [opponent.military.getNumActive('arsonist'), footsoldierKillsLeft].min();
-        footsoldierKillsLeft -= deadArsonists;
         deadCivilians = [footsoldierKillsLeft, opponent.population.population].min();
 
         //use up resources for the attack
