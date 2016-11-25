@@ -33,7 +33,7 @@ let Population = function() {
             name: 'Being Merry',
             deathName: 'merry citizen',
             resources: {
-                alcohol: -1,
+                alcohol: -2,
                 population: 0.5
             }
         });
