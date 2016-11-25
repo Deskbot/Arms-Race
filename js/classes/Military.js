@@ -34,7 +34,7 @@ let Military = function() {
             strength: 1,
             resources: {
                 iron: -20,
-                cloth: 5
+                cloth: -5
             },
             effect: {
                 population: -2
@@ -139,11 +139,22 @@ let Military = function() {
     }
     Military.prototype.removeAll = function() {
         for (let role in this.inAction) {
+            this.owner.population.alter(-this.inAction[role], false);
             this.inAction[role] = 0;
             this.updateInAction(role);
         }
     }
-
+    Military.prototype.roleKillerQty = function(roleName) {
+        let roleQty = this.getNumActive(roleName);
+        let roleData = Military.roles[roleName];
+        
+		//min of num of tanks, most constrained by resources, min needed to win, 
+        return [
+        	roleQty,
+        	this.owner.bag.mostMultiples(roleData.resources),
+        	Math.ceil(Math.abs(this.owner.opponent.population.population / roleData.effect.population))
+    	].min();
+    };
 
     return Military;
 }();

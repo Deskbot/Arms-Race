@@ -174,7 +174,7 @@ let Population = function() {
     Population.prototype.updateLimit = function() {
         this.limitElem.html(this.limit);
     };
-    Population.prototype.alter = function(change) {
+    Population.prototype.alter = function(change, alterMerry) {
         let maxPopulation = this.owner.bag.getQuantity('hut') * Population.hutSize;
         let newPopulation = this.population + change;
 
@@ -185,7 +185,7 @@ let Population = function() {
 
         this.population = newPopulation;
         
-        this.alterQuantity('being-merry', change);
+        if (alterMerry !== false) this.alterQuantity('being-merry', change);
         this.updatePopulation();
     };
     Population.prototype.updatePopulation = function() {
@@ -303,7 +303,6 @@ let Population = function() {
             }
         }
     }
-
 
     return Population;
 }();

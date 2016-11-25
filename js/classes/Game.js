@@ -6,7 +6,7 @@ let Game = function() {
         this.player1 = new Player(this, 1);
         this.player2 = new Player(this, 2);
         this.log = new Log(this);
-        this.speed = speed; //miliseconds
+        this.speed = speed; //milliseconds
 
         this.startTime();
     }
@@ -94,23 +94,25 @@ let Game = function() {
         this.player1.population.killsToDo(this.player2.military.kills);
         this.player2.population.killsToDo(this.player1.military.kills);
 
-        console.log(this.player1.military.kills);
-        console.log(this.player2.military.kills);
+        
+
+        //console.log(this.player1.military.kills);
+        //console.log(this.player2.military.kills);
 
         //total kills
         for (let key in this.player1.military.kills) {
-            console.log(this.player1.military.kills[key]);
+            //console.log(this.player1.military.kills[key]);
             if (this.player1.military.kills[key] > 0) {
                 shake($('body'),0,0,500,75,4);
-                console.log('it shakes');
+                //console.log('it shakes');
                 break;
             }
         }
         for (let key in this.player2.military.kills) {
-            console.log(this.player2.military.kills[key]);
+            //console.log(this.player2.military.kills[key]);
             if (this.player2.military.kills[key] > 0) {
                 shake($('body'),0,0,500,75,4);
-                console.log('it shakes');
+                //console.log('it shakes');
                 break;
             }
         }
@@ -162,8 +164,9 @@ let Game = function() {
         //tanks
         let deadHorsemen, deadFootsoldiers, deadArsonists, deadCivilians;
 
-        let tanks = military.getNumActive('tank-driver');
-        let tankKillsLeft = Math.abs(tanks * Military.roles['tank-driver'].effect.population);
+        let tankKillers = military.roleKillerQty('tank-driver');
+        let tankData = Military.roles['tank-driver'];
+        let tankKillsLeft = Math.abs(tankKillers * tankData.effect.population);
 
         deadTankDrivers = [opponent.military.getNumActive('tank-driver'), tankKillsLeft].min();
         tankKillsLeft -= deadTankDrivers;
@@ -176,6 +179,9 @@ let Game = function() {
 
         deadCivilians = [tankKillsLeft, opponent.population.population].min();
 
+        //use up resources for the attack
+        player.bag.alterTheseQuantities(Bag.multiplyResources(tankData.resources, tankKillers));
+
         kills['tank-driver'] += deadTankDrivers;
         kills.horseman += deadHorsemen;
         kills.footsoldier += deadFootsoldiers;
@@ -185,7 +191,9 @@ let Game = function() {
         //horsemen
 
         let horsemen = military.getNumActive('horseman');
-        let horsemanKillsLeft = Math.abs(horsemen * Military.roles['horseman'].effect.population);
+        let horsemanData = Military.roles['horseman'];
+        let horsemanKillers = military.roleKillerQty('horseman');
+        let horsemanKillsLeft = Math.abs(horsemanKillers * horsemanData.effect.population);
 
         deadHorsemen = [opponent.military.getNumActive('horseman'), horsemanKillsLeft].min();
         horsemanKillsLeft -= deadHorsemen;
@@ -196,35 +204,37 @@ let Game = function() {
 
         deadCivilians = [horsemanKillsLeft, opponent.population.population].min();
 
+        //use up resources for the attack
+        player.bag.alterTheseQuantities(Bag.multiplyResources(horsemanData.resources, horsemanKillers));
+
         kills.horseman += deadHorsemen;
         kills.footsoldier += deadFootsoldiers;
         kills.arsonist += deadArsonists;
         kills.civilian += deadCivilians;
-        
 
         //footsoldier
 
         let footsoldiers = military.getNumActive('footsoldier');
-        let footsoldierKillsLeft = Math.abs(footsoldiers * Military.roles['footsoldier'].effect.population);
-        //console.log(footsoldierKillsLeft, footsoldiers)
+        let footsoldierData = Military.roles['footsoldier'];
+        let footsoldierKillers = military.roleKillerQty('footsoldier');
+        let footsoldierKillsLeft = Math.abs(footsoldierKillers * footsoldierData.effect.population);
 
         deadFootsoldiers = [opponent.military.getNumActive('footsoldier'), footsoldierKillsLeft].min();
-        //console.log(deadFootsoldiers, opponent.military.getNumActive('footsoldier'), footsoldierKillsLeft);
         footsoldierKillsLeft -= deadFootsoldiers;
         
         deadArsonists = [opponent.military.getNumActive('arsonist'), footsoldierKillsLeft].min();
         footsoldierKillsLeft -= deadArsonists;
-        //console.log(deadArsonists);
         deadCivilians = [footsoldierKillsLeft, opponent.population.population].min();
+
+        //use up resources for the attack
+        player.bag.alterTheseQuantities(Bag.multiplyResources(footsoldierData.resources, footsoldierKillers));
 
         kills.footsoldier += deadFootsoldiers;
         kills.arsonist += deadArsonists;
         kills.civilian += deadCivilians;
-        
-
-
 
         military.kills = kills;
+        //military.killedInActionQty = footsoldierKillers + horsemanKillers + tankKillers; //probably what it should be to determine which military people get killed but in fact it's already programmed to do all of them
     }
 
     Game.prototype.advancePlayerItems = function(player) {
@@ -241,7 +251,6 @@ let Game = function() {
 
             let possibleMultipliers = [workers];
             
-
             for (let item in resources) {
 
                 if (item === 'population') { //special case
