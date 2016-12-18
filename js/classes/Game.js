@@ -205,7 +205,7 @@ let Game = function() {
 
         kills.horseman += deadHorsemen;
         kills.footsoldier += deadFootsoldiers;
-        kills.arsonist += deadArsonists;
+        //kills.arsonist += deadArsonists;
         kills.civilian += deadCivilians;
 
         //footsoldier
@@ -224,7 +224,7 @@ let Game = function() {
         player.bag.alterTheseQuantities(Bag.multiplyResources(footsoldierData.resources, footsoldierKillers));
 
         kills.footsoldier += deadFootsoldiers;
-        kills.arsonist += deadArsonists;
+        //kills.arsonist += deadArsonists;
         kills.civilian += deadCivilians;
 
         military.kills = kills;

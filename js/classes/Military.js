@@ -139,7 +139,9 @@ let Military = function() {
     }
     Military.prototype.removeAll = function() {
         for (let role in this.inAction) {
-            this.owner.population.alter(-this.inAction[role], false);
+            //this.owner.population.alter(-this.inAction[role], false);
+            this.owner.population.population -= this.inAction[role];
+            this.owner.population.updatePopulation();
             this.inAction[role] = 0;
             this.updateInAction(role);
         }
